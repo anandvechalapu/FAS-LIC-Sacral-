@@ -1,73 +1,60 @@
 package com.lic.epgs.commission.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lic.epgs.commission.entity.CommissionEntity;
 import com.lic.epgs.commission.entity.CommissionNotesEntity;
+import com.lic.epgs.commission.entity.CommissionNotesTempEntity;
 import com.lic.epgs.commission.entity.CommissionQuestionDetailsEntity;
-import com.lic.epgs.commission.entity.temp.CommissionNotesTempEntity;
-import com.lic.epgs.commission.entity.temp.CommissionQuestionDetailsTempEntity;
-import com.lic.epgs.commission.entity.temp.CommissionTempEntity;
-import com.lic.epgs.commission.repository.CommissionNotesRepository;
-import com.lic.epgs.commission.repository.CommissionNotesTempRepository;
-import com.lic.epgs.commission.repository.CommissionQuestionDetailsRepository;
-import com.lic.epgs.commission.repository.CommissionQuestionDetailsTempRepository;
-import com.lic.epgs.commission.repository.CommissionRepository;
-import com.lic.epgs.commission.repository.CommissionTempRepository;
+import com.lic.epgs.commission.entity.CommissionQuestionDetailsTempEntity;
+import com.lic.epgs.commission.entity.CommissionTempEntity;
 import com.lic.epgs.commission.service.CommissionService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping("/commission")
 public class CommissionController {
+	
+	@Autowired
+	private CommissionService commissionService;
 
-    @Autowired
-    private CommissionService commissionService;
+	@GetMapping("/getCommissionTemp")
+	public ResponseEntity<CommissionTempEntity> getCommissionTemp(@RequestParam Long commissionId, @RequestParam Boolean isActive) {
+		return ResponseEntity.ok(commissionService.getCommissionTemp(commissionId, isActive));
+	}
+	
+	@PutMapping("/updateCommissionTemp")
+	public ResponseEntity<CommissionTempEntity> updateCommissionTemp(@RequestBody CommissionTempEntity commissionTempEntity) {
+		return ResponseEntity.ok(commissionService.updateCommissionTemp(commissionTempEntity));
+	}
+	
+	@GetMapping("/getCommissionQuestionDetailsTemp")
+	public ResponseEntity<List<CommissionQuestionDetailsTempEntity>> getCommissionQuestionDetailsTemp(@RequestParam Long commissionId, @RequestParam Boolean isActive) {
+		return ResponseEntity.ok(commissionService.getCommissionQuestionDetailsTemp(commissionId, isActive));
+	}
+	
+	@PutMapping("/saveCommissionQuestionDetailsTemp")
+	public ResponseEntity<List<CommissionQuestionDetailsTempEntity>> saveCommissionQuestionDetailsTemp(@RequestBody List<CommissionQuestionDetailsTempEntity> commissionQuestionDetailsTempEntityList) {
+		return ResponseEntity.ok(commissionService.saveCommissionQuestionDetailsTemp(commissionQuestionDetailsTempEntityList));
+	}
+	
+	@GetMapping("/getCommissionNotesTemp")
+	public ResponseEntity<List<CommissionNotesTempEntity>> getCommissionNotesTemp(@RequestParam Long commissionId, @RequestParam Boolean isActive) {
+		return ResponseEntity.ok(commissionService.getCommissionNotesTemp(commissionId, isActive));
+	}
+	
+	@PutMapping("/saveCommissionNotesTemp")
+	public ResponseEntity<List<CommissionNotesTempEntity>> saveCommissionNotesTemp(@RequestBody List<CommissionNotesTempEntity> commissionNotesTempEntityList) {
+		return ResponseEntity.ok(commissionService.saveCommissionNotesTemp(commissionNotesTempEntityList));
+	}
+	
 
-    @PostMapping("/saveCommission")
-    public CommissionEntity saveCommission(@RequestBody CommissionEntity commissionEntity) {
-        return commissionService.saveCommission(commissionEntity);
-    }
-
-    @GetMapping("/findByCommissionId/{commissionId}")
-    public CommissionEntity findByCommissionId(@PathVariable("commissionId") Long commissionId) {
-        return commissionService.findByCommissionId(commissionId);
-    }
-
-    @PostMapping("/saveAllQuestionDetails")
-    public List<CommissionQuestionDetailsEntity> saveAllQuestionDetails(@RequestBody List<CommissionQuestionDetailsEntity> commissionQuestionDetailsEntities) {
-        return commissionService.saveAllQuestionDetails(commissionQuestionDetailsEntities);
-    }
-
-    @GetMapping("/findAllQuestionDetailsByCommissionIdAndIsActive/{commissionId}/{isActive}")
-    public List<CommissionQuestionDetailsEntity> findAllQuestionDetailsByCommissionIdAndIsActive(@PathVariable("commissionId") Long commissionId,
-                                                                                                @PathVariable("isActive") boolean isActive) {
-        return commissionService.findAllQuestionDetailsByCommissionIdAndIsActive(commissionId, isActive);
-    }
-
-    @PostMapping("/saveAllNotes")
-    public List<CommissionNotesEntity> saveAllNotes(@RequestBody List<CommissionNotesEntity> commissionNotesEntities) {
-        return commissionService.saveAllNotes(commissionNotesEntities);
-    }
-
-    @GetMapping("/findAllNotesByCommissionIdAndIsActive/{commissionId}/{isActive}")
-    public List<CommissionNotesEntity> findAllNotesByCommissionIdAndIsActive(@PathVariable("commissionId") Long commissionId,
-                                                                            @PathVariable("isActive") boolean isActive) {
-        return commissionService.findAllNotesByCommissionIdAndIsActive(commissionId, isActive);
-    }
-
-    @GetMapping("/findTempCommissionByCommissionIdAndIsActive/{commissionId}/{isActive}")
-    public CommissionTempEntity findTempCommissionByCommissionIdAndIsActive(@PathVariable("commissionId") Long commissionId,
-                                                                           @PathVariable("isActive") boolean isActive) {
-        return commissionService.findTempCommissionByCommissionIdAndIsActive(commissionId, isActive);
-    }
-
-    @GetMapping("/findAllTempCommissionsByCommissionIdAndIsActive/{commissionId}/{isActive}")
-    public List<CommissionTempEntity> findAllTempCommissionsByCommissionIdAndIsActive(@PathVariable("commissionId") Long commissionId,
-                                                                                     @PathVariable("isActive") boolean isActive) {
-        return commissionService.findAllTempCommissionsByCommissionIdAndIsActive(commissionId, isActive);
-    }
-
-    @Put
+}

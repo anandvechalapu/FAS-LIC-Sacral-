@@ -1,77 +1,45 @@
+package com.lic.epgs.commission.service;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lic.epgs.commission.entity.CommissionEntity;
+import com.lic.epgs.commission.entity.CommissionNotesEntity;
+import com.lic.epgs.commission.entity.CommissionNotesTempEntity;
+import com.lic.epgs.commission.entity.CommissionQuestionDetailsEntity;
+import com.lic.epgs.commission.entity.CommissionQuestionDetailsTempEntity;
+import com.lic.epgs.commission.entity.CommissionTempEntity;
+import com.lic.epgs.commission.repository.CommissionRepository;
+
 @Service
 public class CommissionService {
 
-    private CommissionTempRepository commissionTempRepository;
-    private CommissionQuestionDetailsTempRepository commissionQuestionDetailsTempRepository;
-    private CommissionNotesTempRepository commissionNotesTempRepository;
+    @Autowired
     private CommissionRepository commissionRepository;
-    private CommissionQuestionDetailsRepository commissionQuestionDetailsRepository;
-    private CommissionNotesRepository commissionNotesRepository;
 
-    public CommissionService(CommissionTempRepository commissionTempRepository,
-                             CommissionQuestionDetailsTempRepository commissionQuestionDetailsTempRepository,
-                             CommissionNotesTempRepository commissionNotesTempRepository,
-                             CommissionRepository commissionRepository,
-                             CommissionQuestionDetailsRepository commissionQuestionDetailsRepository,
-                             CommissionNotesRepository commissionNotesRepository) {
-        this.commissionTempRepository = commissionTempRepository;
-        this.commissionQuestionDetailsTempRepository = commissionQuestionDetailsTempRepository;
-        this.commissionNotesTempRepository = commissionNotesTempRepository;
-        this.commissionRepository = commissionRepository;
-        this.commissionQuestionDetailsRepository = commissionQuestionDetailsRepository;
-        this.commissionNotesRepository = commissionNotesRepository;
+    public CommissionTempEntity getCommissionTemp(Long commissionId, Boolean isActive){
+        return commissionRepository.findByCommissionIdAndIsActive(commissionId, isActive);
     }
 
-    public CommissionEntity saveCommission(CommissionEntity commissionEntity) {
-        return commissionRepository.save(commissionEntity);
+    public CommissionTempEntity updateCommissionTemp(CommissionTempEntity commissionTempEntity){
+        return commissionRepository.saveAndFlush(commissionTempEntity);
     }
 
-    public CommissionEntity findByCommissionId(Long commissionId) {
-        return commissionRepository.findByCommissionId(commissionId);
+    public List<CommissionQuestionDetailsTempEntity> getCommissionQuestionDetailsTemp(Long commissionId, Boolean isActive){
+        return commissionRepository.findByCommissionIdAndIsActive(commissionId, isActive);
     }
 
-    public List<CommissionQuestionDetailsEntity> saveAllQuestionDetails(List<CommissionQuestionDetailsEntity> commissionQuestionDetailsEntities) {
-        return commissionQuestionDetailsRepository.saveAll(commissionQuestionDetailsEntities);
+    public List<CommissionQuestionDetailsTempEntity> saveCommissionQuestionDetailsTemp(List<CommissionQuestionDetailsTempEntity> commissionQuestionDetailsTempEntityList){
+        return commissionRepository.saveAll(commissionQuestionDetailsTempEntityList);
     }
 
-    public List<CommissionQuestionDetailsEntity> findAllQuestionDetailsByCommissionIdAndIsActive(Long commissionId, boolean isActive) {
-        return commissionQuestionDetailsRepository.findAllByCommissionIdAndIsActive(commissionId, isActive);
+    public List<CommissionNotesTempEntity> getCommissionNotesTemp(Long commissionId, Boolean isActive){
+        return commissionRepository.findByCommissionIdAndIsActive(commissionId, isActive);
     }
 
-    public List<CommissionNotesEntity> saveAllNotes(List<CommissionNotesEntity> commissionNotesEntities) {
-        return commissionNotesRepository.saveAll(commissionNotesEntities);
-    }
-
-    public List<CommissionNotesEntity> findAllNotesByCommissionIdAndIsActive(Long commissionId, boolean isActive) {
-        return commissionNotesRepository.findAllByCommissionIdAndIsActive(commissionId, isActive);
-    }
-
-    public CommissionTempEntity findTempCommissionByCommissionIdAndIsActive(Long commissionId, boolean isActive) {
-        return commissionTempRepository.findByCommissionIdAndIsActive(commissionId, isActive);
-    }
-
-    public List<CommissionTempEntity> findAllTempCommissionsByCommissionIdAndIsActive(Long commissionId, boolean isActive) {
-        return commissionTempRepository.findAllByCommissionIdAndIsActive(commissionId, isActive);
-    }
-
-    public int updateCommissionTempEntity(Long commissionId, String status, String modifiedBy, LocalDateTime modifiedOn, String remarks, boolean isActive) {
-        return commissionTempRepository.updateCommissionTempEntity(commissionId, status, modifiedBy, modifiedOn, remarks, isActive);
-    }
-
-    public List<CommissionQuestionDetailsTempEntity> findTempQuestionDetailsByCommissionIdAndIsActive(Long commissionId, boolean isActive) {
-        return commissionQuestionDetailsTempRepository.findAllByCommissionIdAndIsActive(commissionId, isActive);
-    }
-
-    public int updateQuestionDetailsTempEntity(Long commissionId, boolean isActive, Long tempCommissionId) {
-        return commissionQuestionDetailsTempRepository.updateCommissionQuestionDetailsTempEntity(commissionId, isActive, tempCommissionId);
-    }
-
-    public List<CommissionNotesTempEntity> findTempNotesByCommissionIdAndIsActive(Long commissionId, boolean isActive) {
-        return commissionNotesTempRepository.findAllByCommissionIdAndIsActive(commissionId, isActive);
-    }
-
-    public int updateNotesTempEntity(Long commissionId, boolean isActive, Long tempCommissionId) {
-        return commissionNotesTempRepository.updateCommissionNotesTempEntity(commissionId, isActive, tempCommissionId);
+    public List<CommissionNotesTempEntity> saveCommissionNotesTemp(List<CommissionNotesTempEntity> commissionNotesTempEntityList){
+        return commissionRepository.saveAll(commissionNotesTempEntityList);
     }
 
 }
